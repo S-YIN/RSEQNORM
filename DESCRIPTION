@@ -1,4 +1,4 @@
-Package: FFPEnorm
+Package: RSEQNORM
 Title: FFPE RNA-Seq Normalization
 Version: 0.0.0.9000
 Depends: R (>= 3.5.0),stats
@@ -9,7 +9,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "syin@smu.edu",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: FFPEnorm provides two normalization methods, MIXnorm and SMIXnorm, developed for Formalin-Fixed Paraffin-Embedded (FFPE) tissues RNA-seq data. MIXnorm is based on a two-component mixture model. Expressed genes are modeled by truncated normal distributions (in natural log scale). Non-expressed genes are modeled by zero-inflated Poisson distributions. SMIXnorm is a simplified version of MIXnorm. The performance of SMIXnorm is comparable to MIXnorm, while requiring less computing effort. Compared to MIXnorm, the simplifications are: 1.Expressed genes are modeled by normal distributions without truncation; 2. Non-expressed genes are modeled by zero-inflated Poisson distributions with common Poisson mean. Note that though designed for FFPE RNA-seq data, MIXnorm and SMIXnorm are directly applicable to fresh frozen or like sample RNA-seq data.
+Description: RSEQNORM provides two normalization methods, MIXnorm and SMIXnorm, developed for Formalin-Fixed Paraffin-Embedded (FFPE) tissues RNA-seq data. MIXnorm is based on a two-component mixture model. Expressed genes are modeled by truncated normal distributions (in natural log scale). Non-expressed genes are modeled by zero-inflated Poisson distributions. SMIXnorm is a simplified version of MIXnorm. The performance of SMIXnorm is comparable to MIXnorm, while requiring less computing effort. Compared to MIXnorm, the simplifications are: 1.Expressed genes are modeled by normal distributions without truncation; 2. Non-expressed genes are modeled by zero-inflated Poisson distributions with common Poisson mean. Note that though designed for FFPE RNA-seq data, MIXnorm and SMIXnorm are directly applicable to fresh frozen or like sample RNA-seq data.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
