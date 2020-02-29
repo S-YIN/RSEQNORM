@@ -1,0 +1,19 @@
+#required dependencies
+devtools::use_package("truncnorm") # Defaults to imports
+dtruncnorm
+dtruncnorm()
+setwd("./FFPEnorm")
+setwd("Users/shenyin/Desktop/Research/Normalization_web/FFPEnorm")
+documents()
+document()
+document()
+library(roxygen2)
+library("devtools")
+document()
+document()
+document()
+document()
+document()
+document()
+document()
+document()
