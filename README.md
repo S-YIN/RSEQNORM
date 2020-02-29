@@ -40,8 +40,8 @@ head(ccRCC)
 RSEQNORM is implemented in R. The scripts are under folder [R](https://github.com/S-YIN/RSEQNORM/tree/master/R).  `func_MIXnorm` and `func_SMIXnorm` are the core functions that produce the normalized expression matrix, proportion of expressed genes and the probability of being expressed for each gene. 
 
 ```{r}
-smix <- func_SMIXnorm(dat = ccRCC, max_iter = 20, tol = 0.01, log_file = "SMIXnorm.log", appr = TRUE)
-mix <- func_MIXnorm(dat = ccRCC, max_iter = 20, tol = 0.01, log_file = "MIXnorm.log", appr = TRUE)
+smix <- func_SMIXnorm(dat = ccRCC, max_iter = 20, tol = 0.01, appr = TRUE)
+mix <- func_MIXnorm(dat = ccRCC, max_iter = 20, tol = 0.01, appr = TRUE)
 normalized.by.smix <- smix$SMIX_normalized_log
 normalized.by.mix <- mix$MIX_normalized_log
 express.gene.smix <- rownames(ccRCC)[smix$D > 0.5]
