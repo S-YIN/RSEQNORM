@@ -16,63 +16,40 @@ dpoi <- function(x, delta)
 #' @param dat input raw read count matrix. dim(dat)=J genes * I samples.
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).
 #' @param tol convergency criteria, default is 1e-2, recommend range (1e-5,1).
-#' @param log_file file name that records the log.
 #' @return A list conatins the MLE of all parameters.
 #'
 #' @export
-SMIXnorm <- function(dat, max_iter=20, tol=1e-2, log_file)
+SMIXnorm <- function(dat, max_iter=20, tol=1e-2)
 {
-  cat('Start running SMIXnorm...',file=log_file,append=F)
-  cat('\n',file=log_file,append=T)
   #return nonzero exit code is error occured
   exit.code <- 1
   cat('Start running SMIXnorm... \n')
-
   #check if the input arguments are correct
   if (sum(dat%%1!=0)!=0)
   {
-    cat('Error: Input data is not integer-valued read count matrix. SMIXnorm terminated.',file=log_file,append=T)
-    cat('\n',file=log_file,append=T)
     stop("Input data should be integer-valued read count matrix")
   }
-
   if (max_iter>50|max_iter<10)
   {
-    cat('Error: Use proper maximum number of iteration (10, 50). SMIXnorm terminated.',file=log_file,append=T)
-    cat('\n',file=log_file,append=T)
-    stop("max_iter is out of range")
+    stop("max_iter is out of range. Use proper maximum number of iteration (10, 50).")
   }
-
   if (tol>1|max_iter<1e-5)
   {
-    cat('Error: Use proper convergence criteria (1e-5, 1). SMIXnorm terminated.',file=log_file,append=T)
-    cat('\n',file=log_file,append=T)
-    stop("tol is out of range")
+    stop("tol is out of range. Use proper convergence criteria (1e-5, 1)")
   }
   #end of checking
-
-  cat('Producing natural log transformation of input data',file=log_file,append=T)
-  cat('\n',file=log_file,append=T)
-
   #deal with NA
   dat[is.na(dat)] <- 0
   row.names(dat) <- 1:dim(dat)[1]
-
   #log-transformed data
   log_dat <- as.data.frame(log(dat+1))
   not_zero <- dat != 0
   #I = #of zero's in each row
   I <- rowSums(not_zero)
   samp_no <- dim(dat)[2]
-
-  cat('Running iteration 1 ...',file=log_file,append=T)
-  cat('\n',file=log_file,append=T)
   cat('Running iteration 1 ... \n')
-
   #set initial values for nested EM algorithm
-  # normal mean for each patient
   mu_i <- mu_i_final <- colMeans(log_dat)
-  # normal standard deviation
   sigma_i <- sigma_i_final <- apply(log_dat, 2, sd)
   #proportion of 0's from point mass of each gene
   zip_pi <- pi_j <- 1-I/samp_no
@@ -83,51 +60,39 @@ SMIXnorm <- function(dat, max_iter=20, tol=1e-2, log_file)
   zip_pi[I==0] <- pi_j[I==0] <- 1
   zip_pi[I==dim(dat)[2]] <- pi_j[I==dim(dat)[2]] <- 0
   #mu_i_final, sigma_i_final, phi, delta and pi_j are parameters after update
-
-
-
   #run 1 iteration of E step
   #outer E step: compute E(D_j|obs)
   log_numtor <- as.numeric(colSums(log(dnorm(t(log_dat), mu_i, sigma_i))))
   log_dentor1 <- as.vector(samp_no-I) * log(as.vector(pi_j) + (1-as.vector(pi_j)) * exp(-delta)) + I * log(1-as.vector(pi_j)) + as.vector(apply(dat, 1, dpoi, delta))
-  # exp(-746)=0 in R, the following 6 lines correct for the numerical issues
+  #correct for numerical issues
   id_num <- which(log_numtor <= log_dentor1 & log_dentor1 <= (-700))
   log_numtor[id_num] <- log_numtor[id_num]-log_dentor1[id_num]
   log_dentor1[id_num] <- 0
   id_den <- which(log_dentor1 <= log_numtor & log_numtor <= (-700))
   log_dentor1[id_den] <- log_dentor1[id_den]-log_numtor[id_den]
   log_numtor[id_den] <- 0
-
   numtor <- phi*exp(log_numtor)
   dentor1 <- (1-phi)*exp(log_dentor1)
   dentor = numtor+dentor1
-
   D <- numtor/dentor
   D[is.na(D)] <- 1
   D[I==dim(dat)[2]] <- 1
   D[I==0] <- 0
   #end of outer E step
-
   #inner E step: compute E(Z_ij|obs,D_j)
   Z <- matrix(rep(pi_j^(1-D)/(pi_j^(1-D)+(1-pi_j)^(1-D)*exp(-delta*(1-D))),dim(dat)[2]),dim(dat)[1],dim(dat)[2])
   Z[dat!=0] <- 0
   #end of inner E step
-
   iter <- 1
   tolerance <- 9999
-
   while (tolerance > tol)
   {
     iter <- iter + 1
     if (iter > max_iter)
     {
-      cat(paste('Algorithm exceeded maximum iteration (', max_iter, ') and stopped.'),file=log_file,append=T)
-      cat('\n',file=log_file,append=T)
       warning(paste('Algorithm exceeded maximum iteration (', max_iter, ') and stopped.'))
       break
     }
-    cat(paste('Running iteration',iter,  '...'),file=log_file,append=T)
-    cat('\n',file=log_file,append=T)
     cat(paste('Running iteration',iter,  '...\n'))
     #outer M step
     #update phi
@@ -136,8 +101,6 @@ SMIXnorm <- function(dat, max_iter=20, tol=1e-2, log_file)
     mu_i_final <- colSums(log_dat * D)/sum(D)
     sigma_i_final <- sqrt(colSums(t(t(log_dat)-mu_i_final)^2 * D)/sum(D))
     #end of outer M step
-
-
     #Inner EM to update (pi_j, delta) K=5 times
     K <- 1
     while(K<=5)
@@ -150,7 +113,6 @@ SMIXnorm <- function(dat, max_iter=20, tol=1e-2, log_file)
       deltadentor <-  (1-Z)*(1-D)
       deltanumtor <- (1-Z)*dat*(1-D)
       delta <- sum(deltanumtor)/sum(deltadentor)
-
       #inner E step
       if (K!=5)
       {
@@ -160,32 +122,24 @@ SMIXnorm <- function(dat, max_iter=20, tol=1e-2, log_file)
       K <- K+1
     }
     #End of Inner EM
-
-
     #Outer E step
     log_numtor <- as.numeric(colSums(log(dnorm(t(log_dat), mu_i, sigma_i))))
     log_dentor1 <- as.vector(samp_no-I) * log(as.vector(pi_j) + (1-as.vector(pi_j)) * exp(-delta)) + I * log(1-as.vector(pi_j)) + as.vector(apply(dat, 1, dpoi, delta))
-
     id_num <- which(log_numtor <= log_dentor1 & log_dentor1 <= (-700))
     log_numtor[id_num] <- log_numtor[id_num]-log_dentor1[id_num]
     log_dentor1[id_num] <- 0
     id_den <- which(log_dentor1 <= log_numtor & log_numtor <= (-700))
     log_dentor1[id_den] <- log_dentor1[id_den]-log_numtor[id_den]
     log_numtor[id_den] <- 0
-
     numtor <- phi*exp(log_numtor)
     dentor1 <- (1-phi)*exp(log_dentor1)
     dentor <- numtor+dentor1
-
     D <- numtor/dentor
     D[is.na(D)] <- 1
     D[I==dim(dat)[2]] <- 1
     D[I==0] <- 0
     #end of outer E step
     tolerance <- max(abs(mu_i_final-mu_i),abs(sigma_i_final-sigma_i),abs(nonzero_prop-phi))
-    cat(paste('Maximum parameter change between current and previous iteration is',tolerance),file=log_file,append=T)
-    cat('\n',file=log_file,append=T)
-
     #update all parameters
     mu_i <- mu_i_final
     sigma_i <- sigma_i_final
@@ -193,12 +147,9 @@ SMIXnorm <- function(dat, max_iter=20, tol=1e-2, log_file)
     poi_mean <- delta
     zip_pi <- pi_j
   }
-
   if (iter <= max_iter)
   {
     cat(paste0('\n','Algorithm converges at ', iter,'th iteration.\n' ))
-    cat(paste0('\n','Algorithm converges at ', iter,'th iteration.\n' ),file=log_file,append=T)
-    cat('Exit nested EM algorithm and return MLE\n',file=log_file,append=T)
     #successivefully obtained MLE, set exit.code to zero
     exit.code <- 0
   }
@@ -218,18 +169,13 @@ SMIXnorm <- function(dat, max_iter=20, tol=1e-2, log_file)
 #' then produces the normalized expression matrix.
 #' @param dat input raw read count matrix. dim of dat = J genes * I samples.
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).
-#' @param tol convergency criteria, default is 1e-2, recommend range (1e-5,1).
-#' @param log_file file name that records the log. Default log file name is SMIXnorm.log.
 #' @param appr binary True of False, indicates if the approximate version of normalization should be used.
 #' @return A list contains the normalized expression matrix, proportion of expressed genes and probabilities of being expressed for all genes.
 #'
 #' @export
-
-func_SMIXnorm <- function(dat,max_iter = 20, tol = 1e-2,log_file="SMIXnorm.log",appr=T)
+func_SMIXnorm <- function(dat,max_iter = 20, tol = 1e-2,appr=T)
 {
-  SMIX_res <- SMIXnorm(dat,max_iter=max_iter, tol=tol, log_file=log_file)
-
-  cat('Calculating the normalized expression \n' ,file=log_file,append=T)
+  SMIX_res <- SMIXnorm(dat,max_iter=max_iter, tol=tol)
   subt <- matrix(rep(SMIX_res$mu_i_final,each=dim(dat)[1]),dim(dat)[1],dim(dat)[2])
   if (!appr)
   {
@@ -240,16 +186,10 @@ func_SMIXnorm <- function(dat,max_iter = 20, tol = 1e-2,log_file="SMIXnorm.log",
     SMIX_normalized_log <- as.data.frame(t((SMIX_res$D>0.5)*(log(dat + 1)-subt)))
   }
   names(SMIX_res$D) <- rownames(dat)
-  if (SMIX_res$exit.code!=0)
-  {
-    warning(paste('Algorithm exceeded maximum iteration (', max_iter, ') and stopped.'))
-    cat('MLE may not be accurate. Normalization finished. \n' ,file=log_file,append=T)
-  }
   if (SMIX_res$exit.code==0)
   {
-    cat('Normalization finished successfully \n' ,file=log_file,append=T)
+    cat('Normalization finished successfully \n')
   }
-  #SMIX_log_normalized returns the normalized data in log scale
   return(list(SMIX_normalized_log = t(SMIX_normalized_log),phi = SMIX_res$phi, D = SMIX_res$D))
 }
 
