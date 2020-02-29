@@ -12,7 +12,7 @@ dpoi <- function(x, delta)
 
 #' Main function for the nested EM algorithm for SMIXnorm.
 #'
-#' This function takes the raw data as input and find the MLE of the mixture model.
+#' The function takes the raw data as input and find the MLE of the mixture model.
 #' @param dat input raw read count matrix. dim(dat)=J genes * I samples.
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).
 #' @param tol convergency criteria, default is 1e-2, recommend range (1e-5,1).
@@ -165,7 +165,7 @@ SMIXnorm <- function(dat, max_iter=20, tol=1e-2)
 
 #' Produce SMIXnorm normalized expression matrix
 #'
-#' This function calls the SMIXnorm function to obtain MLE of the mixture model,
+#' func_SMIXnorm calls the SMIXnorm function to obtain MLE of the mixture model,
 #' then produces the normalized expression matrix.
 #' @param dat input raw read count matrix. dim of dat = J genes * I samples.
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).

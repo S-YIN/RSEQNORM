@@ -30,7 +30,7 @@ dzip <- function(x, delta,pi_j)
 
 #' Main function for the nested EM algorithm for MIXnorm.
 #'
-#' This function takes the raw data as input and find the MLE of the mixture model.
+#' The function takes the raw data as input and find the MLE of the mixture model.
 #' @param dat input raw read count matrix. dim(dat)=J genes * I samples.
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).
 #' @param tol convergency criteria, default is 1e-2, recommend range (1e-5,1).
@@ -203,7 +203,7 @@ MIXnorm <- function(dat, max_iter=20, tol=1e-2)
 
 #' Produce MIXnorm normalized expression matrix
 #'
-#' This function calls the MIXnorm function to obtain MLE of the mixture model,
+#' func_MIXnorm calls the MIXnorm function to obtain MLE of the mixture model,
 #' then produces the normalized expression matrix.
 #' @param dat input raw read count matrix. dim of dat = J genes * I samples.
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).
