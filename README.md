@@ -1,5 +1,5 @@
-# FFPEnorm
- MIXnorm and SMIXnorm for FFPE RNA-seq data normalization
+# RSEQNORM
+ MIXnorm and SMIXnorm for RNA-seq data normalization
  
  ## Introduction
 MIXnorm and SMIXnorm are normalization methods designed for Formalin-Fixed Paraffin-Embedded (FFPE) RNA-sequencing (RNA-seq) data. MIXnorm relies on a two-component mixture model, which models non-expressed genes by zero-inflated Poisson distributions and models expressed genes by truncated normal distributions. SMIXnorm is a simplified version of MIXnorm, which uses an simplified mixture model and requires less computation. We recommend using SMIXnorm for FFPE RNA-seq data normalization for faster computation when the number of samples is larger than 25. Though designed specifically for FFPE RNA-seq data, MIXnorm and SMIXnorm are directly applicable to normalize fresh-frozen (FF) RNA-seq data as a special case of FFPE RNA-seq normalization. To obtain the maximum likelihood estimates, we developed a nested EM algorithm, in which closed-form updates are available in each iteration.
@@ -19,13 +19,13 @@ Input file should be a raw read count matrix in gene level with (J genes)*(I sam
 
 ## Example
 ### Install
-You can install FFPEnorm from `github` using the `devtool`. 
+You can install RSEQNORM from `github` using the `devtool`. 
 
 ```{r}
 install.packages("devtools")
 library(devtools)
-install_github("S-YIN/FFPEnorm")
-library(FFPEnorm)
+install_github("S-YIN/RSEQNORM")
+library(RSEQNORM)
 ```
 
 ### Example data
@@ -37,7 +37,7 @@ head(ccRCC)
 ```
 
 ### Usage
-The FFPEnorm is implemented in R. The scripts are under folder [R](https://github.com/S-YIN/FFPEnorm/tree/master/R).  `func_MIXnorm` and `func_SMIXnorm` are the core functions that produce the normalized expression matrix, proportion of expressed genes and the probability of being expressed for each gene. 
+RSEQNORM is implemented in R. The scripts are under folder [R](https://github.com/S-YIN/RSEQNORM/tree/master/R).  `func_MIXnorm` and `func_SMIXnorm` are the core functions that produce the normalized expression matrix, proportion of expressed genes and the probability of being expressed for each gene. 
 
 ```{r}
 smix <- func_SMIXnorm(dat = ccRCC, max_iter = 20, tol = 0.01, log_file = "SMIXnorm.log", appr = TRUE)
@@ -52,7 +52,6 @@ express.gene.mix <- rownames(ccRCC)[mix$D > 0.5]
 * The input data must be raw read count matrix of dimension `J genes * I samples`.
 * The default maximum number of nested EM iteration (max_iter) is `20`, recommend range `(10, 50)`.
 * The default convergency criteria (tol) is `0.01`, recommend range `(1e-5, 1)`.
-* A log file will be written to the current working directory during the normalization process. The default file name is `MIXnorm.log` for `func_MIXnorm` and `SMIXnorm.log` for `func_SMIXnorm`. 
 * The default setting uses an approximate version of normalization (`appr=TRUE`). The exact normalization uses the posterior probabilities of genes being expressed or not to produce the normalized data. The approximate version uses a cut-off value of `0.5` on those probabilities to classify genes as expressed or not, then non-expressed genes will be normalized to exact `0`.  
 
 
