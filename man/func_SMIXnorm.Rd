@@ -4,22 +4,12 @@
 \alias{func_SMIXnorm}
 \title{Produce SMIXnorm normalized expression matrix}
 \usage{
-func_SMIXnorm(
-  dat,
-  max_iter = 15,
-  tol = 0.01,
-  log_file = "SMIXnorm.log",
-  appr = T
-)
+func_SMIXnorm(dat, max_iter = 20, tol = 0.01, appr = T)
 }
 \arguments{
 \item{dat}{input raw read count matrix. dim of dat = J genes * I samples.}
 
-\item{max_iter}{maximum number of iterations for the nested EM algorithm default is 15, recommend range (10, 50).}
-
-\item{tol}{convergency criteria, default is 1e-2, recommend range (1e-5,1).}
-
-\item{log_file}{file name that records the log. Default log file name is SMIXnorm.log.}
+\item{max_iter}{maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).}
 
 \item{appr}{binary True of False, indicates if the approximate version of normalization should be used.}
 }

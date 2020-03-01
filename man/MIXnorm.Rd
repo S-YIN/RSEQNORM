@@ -4,16 +4,14 @@
 \alias{MIXnorm}
 \title{Main function for the nested EM algorithm for MIXnorm.}
 \usage{
-MIXnorm(dat, max_iter = 15, tol = 0.01, log_file)
+MIXnorm(dat, max_iter = 20, tol = 0.01)
 }
 \arguments{
 \item{dat}{input raw read count matrix. dim(dat)=J genes * I samples.}
 
-\item{max_iter}{maximum number of iterations for the nested EM algorithm default is 15, recommend range (10, 50).}
+\item{max_iter}{maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).}
 
 \item{tol}{convergency criteria, default is 1e-2, recommend range (1e-5,1).}
-
-\item{log_file}{file name that records the log.}
 }
 \value{
 the MLE of all parameters
