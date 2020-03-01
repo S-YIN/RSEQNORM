@@ -12,14 +12,14 @@ dpoi <- function(x, delta)
 
 #' Main function for the nested EM algorithm for SMIXnorm.
 #'
-#' The function takes the raw data as input and find the MLE of the mixture model.
+#' Performs the nested EM algorithm to find the MLE of the simplified mixture model.
 #' @param dat input raw read count matrix. dim(dat)=J genes * I samples.
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).
 #' @param tol convergency criteria, default is 1e-2, recommend range (1e-5,1).
 #' @return A list conatins the MLE of all parameters.
 #'
 #' @export
-SMIXnorm <- function(dat, max_iter=20, tol=1e-2)
+SMIXnorm.mle <- function(dat, max_iter=20, tol=1e-2)
 {
   #return nonzero exit code is error occured
   exit.code <- 1
@@ -165,7 +165,7 @@ SMIXnorm <- function(dat, max_iter=20, tol=1e-2)
 
 #' Produce SMIXnorm normalized expression matrix
 #'
-#' func_SMIXnorm calls the SMIXnorm function to obtain MLE of the mixture model,
+#' Calls the SMIXnorm.mle function to obtain MLE of the simplified mixture model,
 #' then produces the normalized expression matrix.
 #' @param dat input raw read count matrix. dim of dat = J genes * I samples.
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).
@@ -173,9 +173,9 @@ SMIXnorm <- function(dat, max_iter=20, tol=1e-2)
 #' @return A list contains the normalized expression matrix, proportion of expressed genes and probabilities of being expressed for all genes.
 #'
 #' @export
-func_SMIXnorm <- function(dat,max_iter = 20, tol = 1e-2,appr=T)
+SMIXnorm <- function(dat,max_iter = 20, tol = 1e-2,appr=T)
 {
-  SMIX_res <- SMIXnorm(dat,max_iter=max_iter, tol=tol)
+  SMIX_res <- SMIXnorm.mle(dat,max_iter=max_iter, tol=tol)
   subt <- matrix(rep(SMIX_res$mu_i_final,each=dim(dat)[1]),dim(dat)[1],dim(dat)[2])
   if (!appr)
   {

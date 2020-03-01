@@ -2,20 +2,21 @@
 % Please edit documentation in R/SMIXnorm.R
 \name{SMIXnorm}
 \alias{SMIXnorm}
-\title{Main function for the nested EM algorithm for SMIXnorm.}
+\title{Produce SMIXnorm normalized expression matrix}
 \usage{
-SMIXnorm(dat, max_iter = 20, tol = 0.01)
+SMIXnorm(dat, max_iter = 20, tol = 0.01, appr = T)
 }
 \arguments{
-\item{dat}{input raw read count matrix. dim(dat)=J genes * I samples.}
+\item{dat}{input raw read count matrix. dim of dat = J genes * I samples.}
 
 \item{max_iter}{maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).}
 
-\item{tol}{convergency criteria, default is 1e-2, recommend range (1e-5,1).}
+\item{appr}{binary True of False, indicates if the approximate version of normalization should be used.}
 }
 \value{
-A list conatins the MLE of all parameters.
+A list contains the normalized expression matrix, proportion of expressed genes and probabilities of being expressed for all genes.
 }
 \description{
-This function takes the raw data as input and find the MLE of the mixture model.
+Calls the SMIXnorm.mle function to obtain MLE of the simplified mixture model,
+then produces the normalized expression matrix.
 }

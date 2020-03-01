@@ -30,15 +30,15 @@ dzip <- function(x, delta,pi_j)
 
 #' Main function for the nested EM algorithm for MIXnorm.
 #'
-#' The function takes the raw data as input and find the MLE of the mixture model.
+#' Performs the nested EM algorithm to find the MLE of the mixture model.
 #' @param dat input raw read count matrix. dim(dat)=J genes * I samples.
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).
 #' @param tol convergency criteria, default is 1e-2, recommend range (1e-5,1).
-#' @return the MLE of all parameters
+#' @return A list contains the MLE of all parameters.
 #'
 #' @export
 #' @import truncnorm
-MIXnorm <- function(dat, max_iter=20, tol=1e-2)
+MIXnorm.mle <- function(dat, max_iter=20, tol=1e-2)
 {
   #return nonzero exit code is error occured
   exit.code <- 1
@@ -203,7 +203,7 @@ MIXnorm <- function(dat, max_iter=20, tol=1e-2)
 
 #' Produce MIXnorm normalized expression matrix
 #'
-#' func_MIXnorm calls the MIXnorm function to obtain MLE of the mixture model,
+#' Calls the MIXnorm.mle function to obtain MLE of the mixture model,
 #' then produces the normalized expression matrix.
 #' @param dat input raw read count matrix. dim of dat = J genes * I samples.
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).
@@ -211,9 +211,9 @@ MIXnorm <- function(dat, max_iter=20, tol=1e-2)
 #' @param appr binary True of False, indicates if the approximate version of normalization should be used.
 #' @return A list contains the normalized expression matrix, proportion of expressed genes and probabilities of being expressed for all genes.
 #' @export
-func_MIXnorm <- function(dat,max_iter = 20, tol = 1e-2,appr=T)
+MIXnorm <- function(dat,max_iter = 20, tol = 1e-2,appr=T)
 {
-  MIX_res <- MIXnorm(dat,max_iter=max_iter, tol=tol)
+  MIX_res <- MIXnorm.mle(dat,max_iter=max_iter, tol=tol)
   beta <- (-MIX_res$mu_i_final)/MIX_res$sigma_i_final
   subt <- matrix(rep((MIX_res$mu_i_final+dnorm(beta)*MIX_res$sigma_i_final/(1-pnorm(beta))),each=dim(dat)[1]),dim(dat)[1],dim(dat)[2])
   #MIX_log_normalized returns the normalized data in log scale
