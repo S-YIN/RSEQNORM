@@ -209,7 +209,7 @@ MIXnorm.mle <- function(dat, max_iter=20, tol=1e-2)
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).
 #' @param tol convergency criteria, default is 1e-2, recommend range (1e-5,1).
 #' @param appr binary True of False, indicates if the approximate version of normalization should be used.
-#' @return A list contains the normalized expression matrix, proportion of expressed genes and probabilities of being expressed for all genes.
+#' @return A list contains the normalized expression matrix (MIX_normalized_log), proportion of expressed genes (phi) and probabilities of being expressed for all genes (D).
 #' @export
 MIXnorm <- function(dat,max_iter = 20, tol = 1e-2,appr=T)
 {

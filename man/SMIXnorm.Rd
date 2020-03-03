@@ -14,7 +14,7 @@ SMIXnorm(dat, max_iter = 20, tol = 0.01, appr = T)
 \item{appr}{binary True of False, indicates if the approximate version of normalization should be used.}
 }
 \value{
-A list contains the normalized expression matrix, proportion of expressed genes and probabilities of being expressed for all genes.
+A list contains the normalized expression matrix (MIX_normalized_log), proportion of expressed genes (phi) and probabilities of being expressed for all genes (D).
 }
 \description{
 Calls the SMIXnorm.mle function to obtain MLE of the simplified mixture model,

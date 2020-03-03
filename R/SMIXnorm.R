@@ -170,8 +170,7 @@ SMIXnorm.mle <- function(dat, max_iter=20, tol=1e-2)
 #' @param dat input raw read count matrix. dim of dat = J genes * I samples.
 #' @param max_iter maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).
 #' @param appr binary True of False, indicates if the approximate version of normalization should be used.
-#' @return A list contains the normalized expression matrix, proportion of expressed genes and probabilities of being expressed for all genes.
-#'
+#' @return A list contains the normalized expression matrix (MIX_normalized_log), proportion of expressed genes (phi) and probabilities of being expressed for all genes (D).
 #' @export
 SMIXnorm <- function(dat,max_iter = 20, tol = 1e-2,appr=T)
 {
