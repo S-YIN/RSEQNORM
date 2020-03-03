@@ -6,7 +6,7 @@ MIXnorm and SMIXnorm are normalization methods designed for Formalin-Fixed Paraf
 
 ## Dependencies
 
-R version: 3.5.3 (2019-3-11)
+R version: > 3.5.3 (2019-3-11)
 
 Platform: x86_64-apple-darwin15.6.0 (64-bit)
 
