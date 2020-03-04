@@ -107,6 +107,10 @@ express.gene.mix <- rownames(ccRCC)[mix$D > 0.5]
 ## Citation
 Yin, S., Wang, X., Jia, G., and Xie, Y. (2020). MIXnorm: Normalizing Gene Expression Data from RNA Sequencing of Formalin-Fixed Paraffin-Embedded Samples. Bioinformatics. In Press. DOI: 10.1093/bioinformatics/btaa153.
 
+## Contact
+Shen Yin (syin@smu.edu)
+Department of Statistical Science,
+Southern Methodist University.
 
 
 
