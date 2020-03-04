@@ -1,5 +1,5 @@
 # RSEQNORM
-RSEQNORM implements MIXnorm and SMIXnorm for RNA-seq data normalization.
+RSEQNORM implements MIXnorm and SMIXnorm for RNA-seq data normalization.\\
 Click [here](http://lce.biohpc.swmed.edu/rseqnorm/) for an online version and more normalization methods.
  
  ## Introduction
