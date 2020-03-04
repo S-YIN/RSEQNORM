@@ -41,22 +41,22 @@ head(ccRCC)
 ```
 
 ### Usage
-RSEQNORM is implemented in R. The scripts are under folder [R](https://github.com/S-YIN/RSEQNORM/tree/master/R).  `MIXnorm` and `SMIXnorm` are the core functions that produce the normalized expression matrix (`$SMIX_normalized_log`/`$MIX_normalized_log`), proportion of expressed genes (`$phi`) and the probability of being expressed for each gene (`$D`). 
+RSEQNORM is implemented in R. The scripts are under folder [R](https://github.com/S-YIN/RSEQNORM/tree/master/R).  `MIXnorm` and `SMIXnorm` are the core functions that produce the normalized expression matrix (`$MIX_normalized_log` and `$SMIX_normalized_log`), proportion of expressed genes (`$phi`) and the probability of being expressed for each gene (`$D`). 
 
-####Run SMIXnorm and MIXnorm
+#### Run SMIXnorm and MIXnorm
 ```{r}
 smix <- SMIXnorm(dat = ccRCC, max_iter = 20, tol = 0.01, appr = TRUE)
 mix <- MIXnorm(dat = ccRCC, max_iter = 20, tol = 0.01, appr = TRUE)
-#see ?SMIXnorm and ?MIXnorm for additional documentation.
 ```
+See ?SMIXnorm and ?MIXnorm for additional documentation.
 
-####Obtain normalized expression
+#### Obtain normalized expression
 ```{r}
 normalized.by.smix <- smix$SMIX_normalized_log
 normalized.by.mix <- mix$MIX_normalized_log
 ```
 
-####Identify expressed genes
+#### Identify expressed genes
 ```{r}
 express.gene.smix <- rownames(ccRCC)[smix$D > 0.5]
 express.gene.mix <- rownames(ccRCC)[mix$D > 0.5]
