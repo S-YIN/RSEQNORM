@@ -1,5 +1,6 @@
 # RSEQNORM
-RSEQNORM implements MIXnorm and SMIXnorm for RNA-seq data normalization.\\
+RSEQNORM implements MIXnorm and SMIXnorm for RNA-seq data normalization.
+
 Click [here](http://lce.biohpc.swmed.edu/rseqnorm/) for an online version and more normalization methods.
  
  ## Introduction
@@ -19,7 +20,16 @@ R Packages: truncnorm_1.0-8
 Input file should be a J-by-I raw read count matrix in gene level with (J genes)*(I samples). We encourage to supply gene names as row names and sample names as column names. An example of the input data in R is shown below.
 
 ```{r}
-> dim(example.data)[1] 18458    32> example.data[1:6,1:6]          NF9   TF9  NF10  TF10  NF11  TF11A1BG        0     0     1     2     0     0A1CF      595    67   292    52   259   112A2M     45347 56829 15779 39418 33654 32715A2ML1       2     0     1     3     0     0A3GALT2     3     5     2     4     1     1A4GALT    497   382   248   429   351   312
+> dim(example.data)
+[1] 18458    32
+> example.data[1:6,1:6]
+          NF9   TF9  NF10  TF10  NF11  TF11
+A1BG        0     0     1     2     0     0
+A1CF      595    67   292    52   259   112
+A2M     45347 56829 15779 39418 33654 32715
+A2ML1       2     0     1     3     0     0
+A3GALT2     3     5     2     4     1     1
+A4GALT    497   382   248   429   351   312
 ```
 
 ## Example
@@ -58,7 +68,16 @@ normalized.by.mix <- mix$MIX_normalized_log
 ```
 The normalized expression is in natural logarithm scale. It is a matrix in the same dimension as the input matrix.
 ```{r}
-> dim(normalized.by.smix)[1] 18458    32> normalized.by.smix[1:6,1:6]              NF9        TF9      NF10       TF10      NF11       TF11A1BG    0.0000000  0.0000000 0.0000000  0.0000000 0.0000000  0.0000000A1CF    0.8885373 -0.8772782 0.9724398 -1.1300976 0.5749542 -0.2046440A2M     5.2204180  5.8510337 4.9587658  5.4816137 5.4381895  5.4635877A2ML1   0.0000000  0.0000000 0.0000000  0.0000000 0.0000000  0.0000000A3GALT2 0.0000000  0.0000000 0.0000000  0.0000000 0.0000000  0.0000000A4GALT  0.7088968  0.8512491 0.8097201  0.9633957 0.8779038  0.8141714
+> dim(normalized.by.smix)
+[1] 18458    32
+> normalized.by.smix[1:6,1:6]
+              NF9        TF9      NF10       TF10      NF11       TF11
+A1BG    0.0000000  0.0000000 0.0000000  0.0000000 0.0000000  0.0000000
+A1CF    0.8885373 -0.8772782 0.9724398 -1.1300976 0.5749542 -0.2046440
+A2M     5.2204180  5.8510337 4.9587658  5.4816137 5.4381895  5.4635877
+A2ML1   0.0000000  0.0000000 0.0000000  0.0000000 0.0000000  0.0000000
+A3GALT2 0.0000000  0.0000000 0.0000000  0.0000000 0.0000000  0.0000000
+A4GALT  0.7088968  0.8512491 0.8097201  0.9633957 0.8779038  0.8141714
 ```
 
 #### Identify expressed genes
@@ -68,9 +87,14 @@ express.gene.mix <- rownames(ccRCC)[mix$D > 0.5]
 ```
 `$D` is the probability of being expressed for each gene. You may choose different cut-off value (the example uses 0.5 ) to identify expressed genes. `$phi` is the proportion of expressed genes among the data. In the example data, both MIXnorm and SMIXnorm identify 78.7\% genes as being expressed.
 ```{r}
-> smix$D[1:6]        A1BG         A1CF          A2M        A2ML1      A3GALT2       A4GALT 6.562856e-47 1.000000e+00 1.000000e+00 1.410672e-48 1.538995e-27 1.000000e+00
+> smix$D[1:6]
+        A1BG         A1CF          A2M        A2ML1      A3GALT2       A4GALT 
+6.562856e-47 1.000000e+00 1.000000e+00 1.410672e-48 1.538995e-27 1.000000e+00
 
-> round(smix$phi,3)[1] 0.787> round(mix$phi,3)[1] 0.787
+> round(smix$phi,3)
+[1] 0.787
+> round(mix$phi,3)
+[1] 0.787
 ```
 
 
