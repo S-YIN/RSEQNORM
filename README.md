@@ -1,5 +1,6 @@
 # RSEQNORM
 RSEQNORM implements MIXnorm and SMIXnorm for RNA-seq data normalization.
+Click [here](http://lce.biohpc.swmed.edu/rseqnorm/) for an online version and more normalization methods.
  
  ## Introduction
 MIXnorm and SMIXnorm are normalization methods designed for Formalin-Fixed Paraffin-Embedded (FFPE) RNA-sequencing (RNA-seq) data. MIXnorm relies on a two-component mixture model, which models non-expressed genes by zero-inflated Poisson distributions and models expressed genes by truncated normal distributions. SMIXnorm is a simplified version of MIXnorm, which uses a simplified mixture model and requires less computation. We recommend using SMIXnorm for FFPE RNA-seq data normalization for faster computation when the number of samples is larger than 25. Though designed specifically for FFPE RNA-seq data, MIXnorm and SMIXnorm are directly applicable to normalize fresh-frozen (FF) RNA-seq data as well. To obtain the maximum likelihood estimates, we developed a nested EM algorithm, in which closed-form updates are available in each iteration.
@@ -65,7 +66,7 @@ The normalized expression is in natural logarithm scale. It is a matrix in the s
 express.gene.smix <- rownames(ccRCC)[smix$D > 0.5]
 express.gene.mix <- rownames(ccRCC)[mix$D > 0.5]
 ```
-`$D` is the probability of being expressed for each gene. You may choose different cut-off value (the example uses 0.5 ) to identify expressed genes. `$phi$ is the proportion of expressed genes among the data. In the example data, both MIXnorm and SMIXnorm identify 78.7\% genes as being expressed.
+`$D` is the probability of being expressed for each gene. You may choose different cut-off value (the example uses 0.5 ) to identify expressed genes. `$phi` is the proportion of expressed genes among the data. In the example data, both MIXnorm and SMIXnorm identify 78.7\% genes as being expressed.
 ```{r}
 > smix$D[1:6]        A1BG         A1CF          A2M        A2ML1      A3GALT2       A4GALT 6.562856e-47 1.000000e+00 1.000000e+00 1.410672e-48 1.538995e-27 1.000000e+00
 
@@ -75,8 +76,8 @@ express.gene.mix <- rownames(ccRCC)[mix$D > 0.5]
 
 ### Details
 * The input data must be raw read count matrix of dimension `J genes * I samples`.
-* The default maximum number of nested EM iteration (max_iter) is `20`, recommend range `(10, 50)`.
-* The default convergency criteria (tol) is `0.01`, recommend range `(1e-5, 1)`.
+* The default maximum number of nested EM iteration (`max_iter`) is `20`, recommend range `(10, 50)`.
+* The default convergency criteria (`tol`) is `0.01`, recommend range `(1e-5, 1)`.
 * The default setting uses an approximate version of normalization (`appr=TRUE`). The exact normalization uses the posterior probabilities of genes being expressed or not to produce the normalized data. The approximate version uses a cut-off value of `0.5` on those probabilities to classify genes as expressed or not, then non-expressed genes will be normalized to exact `0`.  
 
 ## Citation
