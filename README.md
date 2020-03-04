@@ -59,7 +59,7 @@ RSEQNORM is implemented in R. The scripts are under folder [R](https://github.co
 smix <- SMIXnorm(dat = ccRCC, max_iter = 20, tol = 0.01, appr = TRUE)
 mix <- MIXnorm(dat = ccRCC, max_iter = 20, tol = 0.01, appr = TRUE)
 ```
-See ?SMIXnorm and ?MIXnorm for additional documentation.
+See ?SMIXnorm and ?MIXnorm for additional documentations.
 
 #### Obtain normalized expression
 ```{r}
