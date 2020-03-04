@@ -56,11 +56,23 @@ normalized.by.smix <- smix$SMIX_normalized_log
 normalized.by.mix <- mix$MIX_normalized_log
 ```
 
+The normalized expression is a matrix in the same dimension as the input matrix.
+```{r}
+> dim(normalized.by.smix)[1] 18458    32> normalized.by.smix[1:6,1:6]              NF9        TF9      NF10       TF10      NF11       TF11A1BG    0.0000000  0.0000000 0.0000000  0.0000000 0.0000000  0.0000000A1CF    0.8885373 -0.8772782 0.9724398 -1.1300976 0.5749542 -0.2046440A2M     5.2204180  5.8510337 4.9587658  5.4816137 5.4381895  5.4635877A2ML1   0.0000000  0.0000000 0.0000000  0.0000000 0.0000000  0.0000000A3GALT2 0.0000000  0.0000000 0.0000000  0.0000000 0.0000000  0.0000000A4GALT  0.7088968  0.8512491 0.8097201  0.9633957 0.8779038  0.8141714
+```
+
 #### Identify expressed genes
 ```{r}
 express.gene.smix <- rownames(ccRCC)[smix$D > 0.5]
 express.gene.mix <- rownames(ccRCC)[mix$D > 0.5]
 ```
+`$D` is the probability of being expressed for each gene. `$phi$ is the proportion of expressed genes among the data. In the example data, both MIXnorm and SMIXnorm identify 78.7\% genes as being expressed.
+```{r}
+> smix$D[1:6]        A1BG         A1CF          A2M        A2ML1      A3GALT2       A4GALT 6.562856e-47 1.000000e+00 1.000000e+00 1.410672e-48 1.538995e-27 1.000000e+00
+
+> round(smix$phi,3)[1] 0.787> round(mix$phi,3)[1] 0.787
+```
+
 
 ### Details
 * The input data must be raw read count matrix of dimension `J genes * I samples`.
