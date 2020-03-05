@@ -11,6 +11,8 @@ SMIXnorm(dat, max_iter = 20, tol = 0.01, appr = T)
 
 \item{max_iter}{maximum number of iterations for the nested EM algorithm default is 20, recommend range (10, 50).}
 
+\item{tol}{convergency criteria, default is 1e-2, recommend range (1e-5,1).}
+
 \item{appr}{binary True of False, indicates if the approximate version of normalization should be used.}
 }
 \value{

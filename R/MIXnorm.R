@@ -54,7 +54,7 @@ MIXnorm.mle <- function(dat, max_iter=20, tol=1e-2)
     stop("max_iter is out of range. Use proper maximum number of iteration (10, 50).")
   }
 
-  if (tol>1|max_iter<1e-5)
+  if (tol>1|tol<1e-5)
   {
     stop("tol is out of range. Use proper convergence criteria (1e-5, 1)")
   }
